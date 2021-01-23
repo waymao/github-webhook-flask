@@ -10,7 +10,7 @@
 
 
 from flask import Flask, request, jsonify
-import os, asyncio
+import os, threading
 
 import hmac
 from hashlib import sha256
@@ -28,7 +28,7 @@ elif (event is None):
     print("event is none. defaulting to all events.")
 
 
-async def run_actions():
+def run_actions():
     for action in actions:
         action()
 
@@ -56,7 +56,7 @@ def update():
         response = jsonify({"error": "Signature check failed"})
         response.status_code = 403
         return response
-    
+
     # event type
     event_type = request.headers.get("X-GitHub-Event")
     if event_type != event and event is not None:
@@ -71,10 +71,12 @@ def update():
         response.status_code = 200
         return response
     else:
-        asyncio.create_task(run_actions())
+        task = threading.Thread(target=run_actions)
+        task.daemon = True
+        task.start()
         response = jsonify({"result": "success", "updated": "yes"})
         response.status_code = 200
         return response
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')
