@@ -10,7 +10,7 @@
 
 
 from flask import Flask, request, jsonify
-import os
+import os, asyncio
 
 import hmac
 from hashlib import sha256
@@ -26,6 +26,11 @@ elif (ref is None):
     print("ref is none. defaulting to all ref.")
 elif (event is None):
     print("event is none. defaulting to all events.")
+
+
+async def run_actions():
+    for action in actions:
+        action()
 
 @app.route("/update/", methods = ['POST'])
 def update():
@@ -66,17 +71,10 @@ def update():
         response.status_code = 200
         return response
     else:
-        try:
-            for action in actions:
-                action()
-            response = jsonify({"result": "success", "updated": "yes"})
-            response.status_code = 200
-            return response
-        except:
-            response = jsonify({"error": "action run failed"})
-            response.status_code = 500
-            return response
-
+        asyncio.create_task(run_actions())
+        response = jsonify({"result": "success", "updated": "yes"})
+        response.status_code = 200
+        return response
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
