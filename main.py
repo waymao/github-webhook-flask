@@ -21,7 +21,7 @@ app = Flask(__name__)
 secret = os.getenv("SECRET")
 ref = os.getenv("GITHUB_REF")
 
-@app.route("/update/")
+@app.route("/update/", methods = ['POST'])
 def update():
     # request type
     if (request.method != 'POST'):
