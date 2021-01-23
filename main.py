@@ -60,7 +60,7 @@ def update():
         return response
 
     # begin check if is the branch we want and do the action
-    obj = request.json()
+    obj = request.json
     if (ref is not None) and (('ref' not in obj) or (obj['ref'] != ref)):
         response = jsonify({"result": "success"})
         response.status_code = 200
