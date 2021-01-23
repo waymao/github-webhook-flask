@@ -11,7 +11,7 @@ in `action.py`:
 | variable | Type | Purpose |
 | ---- | ---- | ----|
 | `actions` | an array of functions | An array of actions to be run |
-| `secret`  | `string` | the secret configured at github |
+| `secret`  | `bytes` or `bytearray` | the secret configured at github |
 | `ref`     | `string` | the ref to only do the action when a specific event happened |
 | `event`   | `string` | the event that is supposed to be listened to |
 
