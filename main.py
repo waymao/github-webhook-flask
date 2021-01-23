@@ -18,8 +18,13 @@ from hashlib import sha256
 from action import actions, event, secret, ref
 
 app = Flask(__name__)
-secret = os.getenv("SECRET")
-ref = os.getenv("GITHUB_REF")
+
+if (secret is None):
+    print("Error: secret is none")
+elif (ref is None):
+    print("Error: ref is none")
+elif (event is None):
+    print("Error: event is none")
 
 @app.route("/update/", methods = ['POST'])
 def update():
