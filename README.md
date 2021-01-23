@@ -1,6 +1,6 @@
 # Github Webhook processor
 
-prerequisites: Flask and dotenv
+prerequisites: Flask
 
 Accepts `push` webhooks from github, checkes the message integrity, 
 and does the action in ./action.py
